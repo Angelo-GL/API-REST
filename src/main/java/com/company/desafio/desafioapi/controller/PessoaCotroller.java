@@ -40,5 +40,13 @@ public class PessoaCotroller {
         return ResponseEntity.ok(pessoa);
     }
 
+    @PutMapping("/{id}")
+    public  MessageResponseDTO atualizarPessoa(@PathVariable Long id, @RequestBody @Validated Pessoa pessoa){
+        return pessoaService.updatePessoa(id, pessoa);
+    }
+
+
+
+
 
 }
