@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/pessoa")
 public class PessoaCotroller {
@@ -20,6 +23,10 @@ public class PessoaCotroller {
     @Autowired
     private EnderecoService enderecoService;
 
+    @GetMapping
+    public List<Pessoa> listarPessoa () throws NotFoundException {
+        return pessoaService.listPessoa();
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,6 +51,7 @@ public class PessoaCotroller {
     public  MessageResponseDTO atualizarPessoa(@PathVariable Long id, @RequestBody @Validated Pessoa pessoa){
         return pessoaService.updatePessoa(id, pessoa);
     }
+
 
 
 

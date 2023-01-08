@@ -20,10 +20,14 @@ import java.util.stream.Collectors;
 public class PessoaService {
     @Autowired
     private PessoaRepository repository;
+
+
     public MessageResponseDTO createPessoa(Pessoa pessoa) {
         Pessoa salvarPessoa = repository.save(pessoa);
         return createMessageResponse(salvarPessoa.getId());
     }
+
+
     public MessageResponseDTO updatePessoa(Long id, Pessoa pessoa){
         Optional<Pessoa> buscaPessoa = repository.findById(id);
         if(buscaPessoa.isPresent()){
@@ -39,6 +43,11 @@ public class PessoaService {
     }
 
 
+    public List<Pessoa> listPessoa ()throws NotFoundException{
+        List<Pessoa> result = repository.findAll();
+        return result;
+    }
+
     public Pessoa findById(Long id) throws NotFoundException{
             return verifyIfExists(id);
     }
@@ -46,7 +55,7 @@ public class PessoaService {
 
     public List<Pessoa> findAll() {
         List<Pessoa> result = repository.findAll();
-        return result.stream().map(Pessoa::new).collect(Collectors.toList());
+        return result;
     }
 
     private Pessoa verifyIfExists(Long id){
