@@ -20,6 +20,7 @@ import java.util.List;
 public class PessoaCotroller {
     @Autowired
     private PessoaService pessoaService;
+
     @Autowired
     private EnderecoService enderecoService;
 
@@ -28,11 +29,13 @@ public class PessoaCotroller {
         return pessoaService.listPessoa();
     }
 
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO criarPessoa (@RequestBody @Validated Pessoa pessoa){
         return pessoaService.createPessoa(pessoa);
     }
+
 
     @PostMapping("/{id}/endereco")
     @ResponseStatus(HttpStatus.CREATED)
@@ -41,11 +44,13 @@ public class PessoaCotroller {
         return enderecoService.createEndereco(pessoa, endereco);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<Pessoa> findById(@PathVariable Long id) throws NotFoundException {
         Pessoa pessoa = pessoaService.findById(id);
         return ResponseEntity.ok(pessoa);
     }
+
 
     @PutMapping("/{id}")
     public  MessageResponseDTO atualizarPessoa(@PathVariable Long id, @RequestBody @Validated Pessoa pessoa){
