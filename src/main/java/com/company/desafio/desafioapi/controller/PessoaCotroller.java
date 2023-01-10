@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 
 @RestController
@@ -65,10 +64,5 @@ public class PessoaCotroller {
     public  MessageResponseDTO atualizarPessoa(@PathVariable Long id, @RequestBody @Validated Pessoa pessoa){
         return pessoaService.updatePessoa(id, pessoa);
     }
-
-
-
-
-
 
 }
