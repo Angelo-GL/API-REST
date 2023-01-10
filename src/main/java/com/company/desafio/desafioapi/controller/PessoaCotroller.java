@@ -40,15 +40,24 @@ public class PessoaCotroller {
     @PostMapping("/{id}/endereco")
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO criarEndereco(@RequestBody @Validated Endereco endereco, @PathVariable Long id) throws NotFoundException {
-        Pessoa pessoa = pessoaService.findById(id);
-        return enderecoService.createEndereco(pessoa, endereco);
+        Pessoa pessoa = pessoaService.listPessoaId(id);
+        if(pessoa != null){
+            return enderecoService.createEndereco(pessoa, endereco);
+        }else {
+            return new MessageResponseDTO("Endereço não encontrado");
+        }
+
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<Pessoa> findById(@PathVariable Long id) throws NotFoundException {
-        Pessoa pessoa = pessoaService.findById(id);
-        return ResponseEntity.ok(pessoa);
+        Pessoa pessoa = pessoaService.listPessoaId(id);
+        if(pessoa != null){
+            return ResponseEntity.ok(pessoa);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 

@@ -7,8 +7,13 @@ import com.company.desafio.desafioapi.model.Pessoa;
 import com.company.desafio.desafioapi.repository.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EnderecoService {
@@ -27,9 +32,31 @@ public class EnderecoService {
         return enderecos;
     }
 
+    public MessageResponseDTO updateEndPrincipal(Long id){
+        Optional<Endereco> endereco = repository.findById(id);
+        if(endereco.isPresent()){
+            Endereco _endereco = endereco.get();
+            _endereco.setPrincial(true);
+            repository.save(_endereco);
+            return createMessageUpdateEndPrincipal(id, 1);
+        }else{
+            return createMessageUpdateEndPrincipal(id, 0);
+        }
+
+    }
+
+
+
 
     private MessageResponseDTO createMessageResponse(Long id) {
         return new MessageResponseDTO("Endereco criado com ID " + id);
     }
 
+    private MessageResponseDTO createMessageUpdateEndPrincipal(Long id, Integer num){
+        if(num == 1){
+            return new MessageResponseDTO("Endereço Principal " + id +  " atualizado" );
+        }else {
+            return new MessageResponseDTO("Endereco não encontrado");
+        }
+    }
 }

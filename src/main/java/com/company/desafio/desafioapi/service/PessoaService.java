@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
@@ -48,29 +48,32 @@ public class PessoaService {
         return result;
     }
 
-    public Pessoa findById(Long id) throws NotFoundException{
-            return verifyIfExists(id);
+    public Pessoa listPessoaId(Long id) throws NotFoundException{
+        Optional<Pessoa> resultaPessoa = repository.findById(id);
+        if(resultaPessoa.isPresent()){
+            return resultaPessoa.get();
+        }else {
+            return null;
+        }
     }
 
-
-    public List<Pessoa> findAll() {
-        List<Pessoa> result = repository.findAll();
-        return result;
-    }
 
     private Pessoa verifyIfExists(Long id){
         return repository.findById(id).orElseThrow();
     }
+
+
     private MessageResponseDTO createMessageResponse(Long id) {
         return new MessageResponseDTO(" Pessoa criada com ID " + id);
     }
+
+
     private MessageResponseDTO createMessaResponseUpdate(Long id, int cod){
         if(cod == 1){
             return new MessageResponseDTO("Pessoa de ID " + id +" atualzada");
         }else {
             return new MessageResponseDTO("Erro ao atualizar pessoa de ID " + id);
         }
-
     }
 
 }
