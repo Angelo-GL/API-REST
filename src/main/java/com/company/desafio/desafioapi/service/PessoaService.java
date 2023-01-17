@@ -2,6 +2,7 @@ package com.company.desafio.desafioapi.service;
 
 import com.company.desafio.desafioapi.dto.MessageResponseDTO;
 import com.company.desafio.desafioapi.exception.NotFoundException;
+import com.company.desafio.desafioapi.exception.ObjectNotFoundExceptions;
 import com.company.desafio.desafioapi.model.Pessoa;
 import com.company.desafio.desafioapi.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ public class PessoaService {
 
 
     public MessageResponseDTO createPessoa(Pessoa pessoa) {
+        pessoa.setId(null);
         Pessoa salvarPessoa = repository.save(pessoa);
         return createMessageResponse(salvarPessoa.getId());
     }
@@ -38,18 +40,14 @@ public class PessoaService {
     }
 
 
-    public List<Pessoa> listPessoa ()throws NotFoundException{
+    public List<Pessoa> listPessoa (){
         List<Pessoa> result = repository.findAll();
         return result;
     }
 
-    public Pessoa listPessoaId(Long id) throws NotFoundException{
+    public Pessoa listPessoaId(Long id){
         Optional<Pessoa> resultaPessoa = repository.findById(id);
-        if(resultaPessoa.isPresent()){
-            return resultaPessoa.get();
-        }else {
-            return null;
-        }
+        return resultaPessoa.orElseThrow(() -> new ObjectNotFoundExceptions("Pessoa Não encontrada, Tipo: "+ Pessoa.class.getName()));
     }
 
 
@@ -66,4 +64,7 @@ public class PessoaService {
         }
     }
 
+    public void delete(Long id) {
+        repository.delete( listPessoaId(id));
+    }
 }

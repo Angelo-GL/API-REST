@@ -24,7 +24,7 @@ public class PessoaCotroller {
     private EnderecoService enderecoService;
 
     @GetMapping
-    public List<Pessoa> listarPessoa () throws NotFoundException {
+    public List<Pessoa> listarPessoa (){
         return pessoaService.listPessoa();
     }
 
@@ -36,7 +36,7 @@ public class PessoaCotroller {
     }
 
 
-    @PostMapping("/{id}/endereco")
+    @PostMapping(value = "/{id}/endereco")
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO criarEndereco(@RequestBody @Validated Endereco endereco, @PathVariable Long id) throws NotFoundException {
         Pessoa pessoa = pessoaService.listPessoaId(id);
@@ -49,20 +49,21 @@ public class PessoaCotroller {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Pessoa> findById(@PathVariable Long id) throws NotFoundException {
         Pessoa pessoa = pessoaService.listPessoaId(id);
-        if(pessoa != null){
-            return ResponseEntity.ok(pessoa);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return ResponseEntity.ok().body(pessoa);
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}")
     public  MessageResponseDTO atualizarPessoa(@PathVariable Long id, @RequestBody @Validated Pessoa pessoa){
         return pessoaService.updatePessoa(id, pessoa);
+    }
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deletarPessoa(@PathVariable Long id){
+        pessoaService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
